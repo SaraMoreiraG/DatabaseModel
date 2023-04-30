@@ -1,67 +1,66 @@
 import os
 import sys
 from sqlalchemy import Column, ForeignKey, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy import create_engine
 from eralchemy2 import render_er
 
 Base = declarative_base()
 
-class User(Base):
-    __tablename__ = 'user'
-    
-    id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
-    email = Column(String(250), nullable=False)
-    password = Column(String(250), nullable=False)
+class Country(Base):
+    __tablename__ = 'country'
 
-class Character(Base):
-    __tablename__ = 'character'
-    
     id = Column(Integer, primary_key=True)
-    name = Column(String(30))
-    height = Column(Integer)
-    mass = Column(Integer)
-    hair_color = Column(String(30))
-    skin_color = Column(String(30))
-    eye_color = Column(String(30))
-    birth_year = Column(Integer)
-    gender = Column(String(30))
-    homeworld = Column(String(250))
-    url = Column(String(250))
+    name = Column(String(20), unique=False, nullable=False)
 
-class Planet(Base):
-    __tablename__ = 'planet'
-    
+class Comments(Base):
+    __tablename__ = 'comments'
+
     id = Column(Integer, primary_key=True)
-    name = Column(String(30))
-    diameter = Column(Integer)
-    rotation_period = Column(Integer)
-    orbital_period = Column(Integer)
-    gravity = Column(String(30))
-    population  = Column(Integer)
-    climate = Column(String(30))
-    terraint = Column(String(30))
-    url = Column(String(250))
+    post_id = Column(Integer(), ForeignKey('post.id'), nullable=False)
+    user_id = Column(Integer(), ForeignKey('user.id'), nullable=False)
+    # date = Column(Datetime(), unique=False, nullable=False)
+    comment = Column(String(250), unique=True, nullable=False)
 
 class Favorites(Base):
     __tablename__ = 'favorites'
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer(), ForeignKey('user.id'), nullable=False)
+    post_id = Column(Integer(), ForeignKey('post.id'), nullable=False)
+
+class Post(Base):
+    __tablename__ = 'post'
     
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship(User)
-    character_id = Column(Integer, ForeignKey('character.id'))
-    character_name = Column(Integer, ForeignKey('character.name'))
-    character = relationship(Character)
-    planet_id = Column(Integer, ForeignKey('planet.id'))
-    planet_name = Column(Integer, ForeignKey('planet.name'))
-    planet = relationship(Planet)
+    user_id = Column(Integer(), ForeignKey('user.id'), nullable=False)
+    tittle = Column(String(40), unique=True, nullable=False)
+    image = Column(Integer(), unique=False, nullable=False)
+    description = Column(String(120), unique=True, nullable=False)
+    comments = relationship(Comments)
 
-    favorite_name = Column(String(250))
+class User(Base):
+    __tablename__ = 'user'
+
+    id = Column(Integer, primary_key=True)
+    user_name = Column(String(80), unique=True, nullable=False)
+    email = Column(String(120), unique=True, nullable=False)
+    password = Column(String(80), unique=False, nullable=False)
+    full_name = Column(String(80), unique=False, nullable=True)
+    age = Column(Integer(), unique=False, nullable=True)
+    description = Column(String(120), unique=False, nullable=True)
+    # admin = Column(Boolean(), unique=False, nullable=False)
+    country = relationship(Country)
+    posts = relationship(Post)
+    favorites = relationship(Favorites)
 
     def to_dict(self):
         return {}
 
 ## Draw from SQLAlchemy base
-render_er(Base, 'diagram.png')
+try:
+    result = render_er(Base, 'diagram.png')
+    print("Success! Check the diagram.png file")
+except Exception as e:
+    print("There was a problem genering the diagram")
+    raise e
