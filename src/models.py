@@ -19,7 +19,6 @@ class Comments(Base):
     id = Column(Integer, primary_key=True)
     post_id = Column(Integer(), ForeignKey('post.id'), nullable=False)
     user_id = Column(Integer(), ForeignKey('user.id'), nullable=False)
-    # date = Column(Datetime(), unique=False, nullable=False)
     comment = Column(String(250), unique=True, nullable=False)
 
 class Favorites(Base):
@@ -49,7 +48,6 @@ class User(Base):
     full_name = Column(String(80), unique=False, nullable=True)
     age = Column(Integer(), unique=False, nullable=True)
     description = Column(String(120), unique=False, nullable=True)
-    # admin = Column(Boolean(), unique=False, nullable=False)
     country = relationship(Country)
     posts = relationship(Post)
     favorites = relationship(Favorites)
