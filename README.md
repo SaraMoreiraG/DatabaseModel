@@ -1,15 +1,3 @@
-<a href="https://www.breatheco.de"><img height="280" align="right" src="https://github.com/4GeeksAcademy/flask-rest-hello/blob/main/docs/assets/badge.png?raw=true"></a>
-
-# Flask Boilerplate for Junior Developers
-
-Create flask API's in minutes, [📹 watch the video tutorial](https://youtu.be/ORxQ-K3BzQA).
-
-- [Extensive documentation here](https://start.4geeksacademy.com).
-- Integrated with Pipenv for package managing.
-- Fast deloyment to heroku with `$ pipenv run deploy`.
-- Use of `.env` file.
-- SQLAlchemy integration for database abstraction.
-
 ## 1) Installation
 
 This template installs itself in a few seconds if you open it for free with Codespaces (recommended) or Gitpod. 
